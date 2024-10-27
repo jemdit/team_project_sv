@@ -1,0 +1,147 @@
+@keyframes animatedGradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+body {
+    background: linear-gradient(135deg, #cdb4db, #ffc8dd, #ffafcc, #bde0fe);
+    background-size: 200% 200%;
+    animation: animatedGradient 30s ease infinite; /* speed: 4 */
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.profile-container {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 500px;
+}
+
+h1, h2 {
+    color: #333;
+    text-align: center;
+}
+
+.restaurant-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.restaurant-form input, .restaurant-form button {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.restaurant-form input {
+    background-color: #f9f9f9;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.restaurant-form button {
+    background-color: #17a;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 10px;
+    width: 100%;
+}
+
+.restaurant-form button:hover {
+    background-color: #005f99;
+}
+
+.restaurant-list {
+    list-style: none;
+    padding: 0;
+    text-align: left;
+}
+
+.restaurant-list li {
+    background-color: #f0f0f0;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.delete-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #d9534f;
+    transition: color 0.3s, transform 0.3s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.delete-btn i {
+    font-size: 18px;
+}
+
+.delete-btn:hover {
+    color: #c9302c;
+    transform: scale(1.2);
+}
+
+header {
+    position: relative;
+}
+
+.logout-btn {
+    position: absolute;
+    top: 5px; /* Налаштуйте під ваш дизайн */
+    right: 10px;
+    background-color: #d9534f;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.logout-btn:hover {
+    background-color: #c9302c;
+}
+
+.flashes {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+}
+
+.flashes .success {
+    color: #3c763d;
+    background-color: #dff0d8;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.flashes .error {
+    color: #a94442;
+    background-color: #f2dede;
+    padding: 10px;
+    border-radius: 5px;
+}

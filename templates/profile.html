@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/p_style.css">
+    <title>Profile</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='ss.ico') }}">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+
+</head>
+<body>
+<div class="profile-container">
+    <header>
+        <h1>Welcome, {{ current_user.username }}!</h1>
+        <form action="{{ url_for('logout') }}" method="post" style="display:inline;">
+            <button type="submit" class="btn btn-danger">Logout</button>
+        </form>
+    </header>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <form method="POST" class="restaurant-form">
+        <input type="text" name="name" class="form-control" placeholder="Restaurant Name" required>
+        <input type="text" name="location" class="form-control" placeholder="Location" required>
+        <button type="submit" class="btn btn-primary mt-2">Add Restaurant</button>
+    </form>
+
+    <section class="restaurants">
+        <h2>Your Restaurants:</h2>
+        <ul class="list-group">
+            {% for restaurant in restaurants %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    {{ restaurant.name }} - {{ restaurant.location }}
+                    <form action="{{ url_for('delete_restaurant', id=restaurant.id) }}" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-outline-danger btn-sm"><i class='bx bx-trash'></i></button>
+                    </form>
+                </li>
+            {% endfor %}
+        </ul>
+    </section>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
