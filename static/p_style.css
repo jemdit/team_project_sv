@@ -1,147 +1,77 @@
-@keyframes animatedGradient {
-    0% {
-        background-position: 0% 50%;
-    }
-    50% {
-        background-position: 100% 50%;
-    }
-    100% {
-        background-position: 0% 50%;
-    }
-}
-
 body {
-    background: linear-gradient(135deg, #cdb4db, #ffc8dd, #ffafcc, #bde0fe);
-    background-size: 200% 200%;
-    animation: animatedGradient 30s ease infinite; /* speed: 4 */
-    height: 100vh;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    background-color: #eef2f3; /* Світлий фон */
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    margin: 0; /* Відсутність зовнішніх відступів */
+    padding: 0; /* Відсутність внутрішніх відступів */
 }
-
 
 .profile-container {
-    background-color: #fff;
-    padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 500px;
-}
-
-h1, h2 {
-    color: #333;
-    text-align: center;
-}
-
-.restaurant-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    margin-bottom: 20px;
-}
-
-.restaurant-form input, .restaurant-form button {
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-}
-
-.restaurant-form input {
-    background-color: #f9f9f9;
-    margin-bottom: 10px;
-    width: 100%;
-}
-
-.restaurant-form button {
-    background-color: #17a;
-    color: #fff;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    margin-top: 10px;
-    width: 100%;
-}
-
-.restaurant-form button:hover {
-    background-color: #005f99;
-}
-
-.restaurant-list {
-    list-style: none;
-    padding: 0;
-    text-align: left;
-}
-
-.restaurant-list li {
-    background-color: #f0f0f0;
-    margin-bottom: 10px;
-    padding: 10px;
-    border-radius: 5px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.delete-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: #d9534f;
-    transition: color 0.3s, transform 0.3s;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.delete-btn i {
-    font-size: 18px;
-}
-
-.delete-btn:hover {
-    color: #c9302c;
-    transform: scale(1.2);
+    max-width: 800px; /* Максимальна ширина контейнера */
+    margin: 40px auto; /* Центрування контейнера */
+    padding: 30px; /* Внутрішні відступи */
+    background-color: #ffffff; /* Білий фон */
+    border-radius: 10px; /* Заокруглені кути */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Тінь для глибини */
 }
 
 header {
-    position: relative;
+    display: flex;
+    justify-content: space-between; /* Розташувати заголовок і кнопку виходу */
+    align-items: center; /* Вертикальне центрування */
+    margin-bottom: 20px; /* Відступи внизу */
 }
 
-.logout-btn {
-    position: absolute;
-    top: 5px; /* Налаштуйте під ваш дизайн */
-    right: 10px;
-    background-color: #d9534f;
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
+h1 {
+    font-size: 28px; /* Розмір шрифту заголовку */
+    color: #333; /* Колір тексту заголовку */
 }
 
-.logout-btn:hover {
-    background-color: #c9302c;
+.restaurant-form {
+    margin: 20px 0; /* Відступи для форми */
 }
 
-.flashes {
-    list-style: none;
-    padding: 0;
-    margin: 20px 0;
+.form-control {
+    margin-bottom: 10px; /* Відступи між полями вводу */
+    border-radius: 5px; /* Заокруглення полів вводу */
+    border: 1px solid #ced4da; /* Легка рамка */
 }
 
-.flashes .success {
-    color: #3c763d;
-    background-color: #dff0d8;
-    padding: 10px;
-    border-radius: 5px;
+.btn-primary {
+    background-color: #007bff; /* Основний колір кнопки */
+    border: none; /* Без обводки */
 }
 
-.flashes .error {
-    color: #a94442;
-    background-color: #f2dede;
-    padding: 10px;
-    border-radius: 5px;
+.btn-primary:hover {
+    background-color: #0056b3; /* Колір кнопки при наведенні */
+}
+
+.restaurants {
+    margin-top: 20px; /* Відступи */
+}
+
+.list-group-item {
+    display: flex; /* Використання флексу для елементів списку */
+    justify-content: space-between; /* Проміжок між елементами */
+    align-items: center; /* Вертикальне центрування */
+    padding: 15px; /* Внутрішні відступи */
+    transition: background-color 0.3s; /* Анімація для фону */
+}
+
+.list-group-item:hover {
+    background-color: #f8f9fa; /* Колір при наведенні */
+}
+
+.btn-outline-danger:hover {
+    background-color: #ffcccc; /* Колір при наведенні кнопки видалення */
+}
+
+.alert {
+    margin-bottom: 20px; /* Відступи знизу для сповіщень */
+}
+
+/* Адаптивні стилі */
+@media (max-width: 768px) {
+    .profile-container {
+        width: 90%; /* Ширина контейнера на малих екранах */
+    }
 }

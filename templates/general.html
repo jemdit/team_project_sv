@@ -3,29 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Список Ресторанів</title>
+    <title>Головна сторінка</title>
+    <link rel="stylesheet" href="style_3.css">
 </head>
 <body>
-    <h1>Список Ресторанів</h1>
-
-    <ul>
-        {% for restaurant in restaurants %}
-            <li><strong>{{ restaurant.name }}</strong> - {{ restaurant.description }} ({{ restaurant.address }})</li>
-        {% endfor %}
-    </ul>
-
-    <h2>Додати Новий Ресторан</h2>
-    <form action="/" method="POST">
-        <label for="name">Назва:</label>
-        <input type="text" id="name" name="name" required><br>
-
-        <label for="description">Опис:</label>
-        <textarea id="description" name="description" required></textarea><br>
-
-        <label for="address">Адреса:</label>
-        <input type="text" id="address" name="address" required><br>
-
-        <button type="submit">Додати</button>
-    </form>
+    <div class="background-image">
+        <button class="animated-button" onclick="window.location.href='restaurants'">
+            Перейти до ресторанів
+        </button>
+    </div>
 </body>
 </html>
