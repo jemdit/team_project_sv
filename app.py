@@ -1,6 +1,8 @@
-from flask import Flask, render_template, redirect, url_for, request, flash
+import base64
+
+from flask import Flask, render_template, redirect, url_for, request, flash, session
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
+from flask_login import UserMixin, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_migrate import Migrate
 
@@ -10,9 +12,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
-login_manager = LoginManager()
-login_manager.init_app(app)
-login_manager.login_view = 'login'
+
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -20,16 +20,13 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(150), unique=True, nullable=False)
     password = db.Column(db.String(150), nullable=False)
 class Restaurant(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    restaurant_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(150), nullable=False)
     location = db.Column(db.String(150), nullable=False)
     description = db.Column(db.String(150), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    user = db.relationship('User', backref=db.backref('restaurants', lazy=True))
-
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))
+    photo_data = db.Column(db.LargeBinary, nullable=False)
+    # user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    # user = db.relationship('User', backref=db.backref('restaurants', lazy=True))
 
 @app.route('/')
 def general():
@@ -42,8 +39,8 @@ def login():
         password = request.form.get('password')
         user = User.query.filter_by(username=username).first()
         if user and check_password_hash(user.password, password):
-            login_user(user)
-            return redirect(url_for('restaurants'))
+            session['username'] = username
+            return redirect(url_for('restaurant'))
         else:
             flash('Invalid credentials')
             return redirect(url_for('login'))
@@ -65,12 +62,10 @@ def signup():
     return render_template('index.html', login=False)
 
 @app.route('/home')
-@login_required
 def home():
     return render_template('home.html')
 
 @app.route('/profile', methods=['GET', 'POST'])
-@login_required
 def profile():
     if request.method == 'POST':
         name = request.form.get('name')
@@ -88,32 +83,55 @@ def profile():
     user_restaurants = Restaurant.query.filter_by(user_id=current_user.id).all()
     return render_template('profile.html', restaurants=user_restaurants)
 
+@app.route('/add_restaurant', methods=['GET', 'POST'])
+def add_restaurant():
+    if request.method == 'POST':
+        user_id = session.get('username')
+        name = request.form.get('name')
+        location = request.form.get('location')
+        description = request.form.get('description')
+
+        photo = request.files.get('photo')
+        photo_data = photo.read()
+
+        if user_id:
+            restaurant = Restaurant(
+                name=name,
+                location=location,
+                description=description,
+                photo_data=photo_data
+            )
+            # user=current_user
+            db.session.add(restaurant)
+            db.session.commit()
+            flash('Restaurant added successfully!', 'success')
+
+        return redirect(url_for('home'))
+
 
 @app.route('/restaurants', methods=['GET'])
-def restaurants():
-    return render_template('restaurants.html')
+def restaurant():
+    all_restaurants = Restaurant.query.all()
+    for restaurant in all_restaurants:
+        restaurant.photo_data = base64.b64encode(restaurant.photo_data).decode('utf-8')
+    return render_template('restaurants.html', restaurants=all_restaurants)
 
-@app.route('/add_restaurant', methods=['POST'])
-@login_required
-def add_restaurant():
-    name = request.form.get('name')
-    location = request.form.get('location')
-    description = request.form.get('description')
+@app.route('/restaurant/<int:restaurant_id>', methods=['GET', 'POST'])
+def restaurants(restaurant_id):
+    restaurant = Restaurant.query.get(restaurant_id)
 
-    if not name or not location:
-        flash('Both fields are required!', 'danger')
-    else:
-        new_restaurant = Restaurant(name=name, location=location, description=description, user=current_user)
-        db.session.add(new_restaurant)
-        db.session.commit()
-        flash('Restaurant added successfully!', 'success')
+    if not restaurant:
+        flash('Restaurant not found!', 'danger')
+        return redirect(url_for('home'))
 
-    return redirect(url_for('home'))
+    if restaurant.photo:
+        restaurant.photo = base64.b64encode(restaurant.photo_data).decode('utf-8')
+
+    return render_template('restaurants.html', restaurant=restaurant)
 
 @app.route('/delete_restaurant/<int:id>', methods=['POST'])
-@login_required
-def delete_restaurant(id):
-    restaurant = Restaurant.query.get_or_404(id)
+def delete_restaurant(restaurant_id):
+    restaurant = Restaurant.query.get_or_404(restaurant_id)
     if restaurant.user_id != current_user.id:
         flash('You do not have permission to delete this restaurant.')
         return redirect(url_for('profile'))
@@ -125,9 +143,8 @@ def delete_restaurant(id):
 
 
 @app.route('/logout', methods=['POST'])
-@login_required
 def logout():
-    logout_user()
+    session.pop('username', None)
     flash('You have been logged out.')
     return redirect(url_for('login'))
 

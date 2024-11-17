@@ -21,7 +21,7 @@
     <!-- Навігаційна панель -->
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
-            <a class="navbar-brand" href="{{ url_for('restaurants') }}">RESTS</a>
+            <a class="navbar-brand" href="{{ url_for('restaurant') }}">RESTS</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -31,13 +31,9 @@
                         <a class="nav-link active" aria-current="page" href="{{ url_for('home') }}">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('restaurants') }}">Ресторани</a>
+                        <a class="nav-link" href="{{ url_for('restaurant') }}">Ресторани</a>
                     </li>
                 </ul>
-                <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
-                </form>
             </div>
         </div>
     </nav>
@@ -45,15 +41,22 @@
     <div class="container mt-4">
         <h1 class="text-center">Список Ресторанів</h1>
 
-        <!-- Відображення всіх ресторанів -->
-        <ul class="list-unstyled">
-            {% for restaurant in restaurants %}
-                <li class="restaurant-item">
+            {% if restaurants %}
+                <ul class="list-unstyled">
+                {% for restaurant in restaurants %}
+                    <li class="restaurant-item">
                     <h4>{{ restaurant.name }}</h4>
-                    <p>{{ restaurant.description }}</p>
-                    <p><strong>Адреса:</strong> {{ restaurant.address }}</p>
-                </li>
-            {% endfor %}
+                    {% if restaurant.photo_data %}
+                        <img class="painting-image" src="data:image/jpeg;base64,{{ restaurant.photo_data }}" alt="{{ restaurant.name }}" style="max-height: 200px; object-fit: cover;">
+                    {% endif %}
+                <p>{{ restaurant.description }}</p>
+                <p><strong>Адреса:</strong> {{ restaurant.location }}</p>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>Немає ресторанів для відображення.</p>
+{% endif %}
         </ul>
     </div>
 </body>
